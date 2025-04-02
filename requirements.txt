@@ -1,0 +1,10 @@
+pandas
+numpy<2
+rdata
+scikit-learn
+plotly
+pyarrow
+jupyter
+ipykernel
+nbformat
+nbconvert
