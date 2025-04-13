@@ -58,6 +58,25 @@ standard = load_table("big5_player_standard")
 print(standard.groupby("Season_End_Year")["Min_Playing"].max())
 """)
 
+md("""\
+## 2. Feature engineering: raw counts to comparable per-90 rates
+
+Most FBref columns are season totals, which aren't comparable across
+players with different playing time. Every rate feature here (`*_p90`) is
+computed by hand as `raw_count / (minutes_played / 90)`, restricted to
+players with **≥900 minutes** in the season (~10 full matches — the usual
+floor for including a player in per-90 comparisons at all, otherwise a
+player's one hot game skews their rate wildly). Goalkeepers are excluded
+entirely — their metrics live in a different world.
+
+Full curated feature list: `src/similarity.py::FEATURE_COLS` (30 per-90
+rates and percentages across attacking, passing, carrying, and defending).
+""")
+
+code("""\
+df[["player","club","league","position","age","minutes"] + FEATURE_COLS[:6]].sample(5, random_state=3)
+""")
+
 
 nb["cells"] = cells
 nbf.write(nb, "analysis.ipynb")
