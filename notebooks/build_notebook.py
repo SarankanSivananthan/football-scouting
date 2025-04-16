@@ -77,6 +77,37 @@ code("""\
 df[["player","club","league","position","age","minutes"] + FEATURE_COLS[:6]].sample(5, random_state=3)
 """)
 
+md("""\
+## 3. Percentile radars
+
+For each metric, where does a player rank against others **in the same
+position**, as a percentile? A curated, position-specific subset of ~10
+metrics keeps each radar readable (see `src/radar.py::RADAR_TEMPLATES`).
+""")
+
+code("""\
+all_template_cols = sorted({col for t in RADAR_TEMPLATES.values() for col in t})
+df_pct = compute_percentiles(df, all_template_cols)
+""")
+
+code("""\
+player_radar(df_pct, "Kylian Mbappé").show()
+""")
+
+code("""\
+player_radar(df_pct, "Virgil van Dijk").show()
+""")
+
+md("""\
+Mbappé's radar is what you'd expect for a 2021-22-season superstar
+forward: elite on non-penalty xG, box touches and progressive carries.
+Van Dijk's is a defender's radar, not a forward's — high on
+tackles+interceptions, aerials and pass completion, and that's the point:
+the *same ten-metric template* would be meaningless applied across
+positions, which is why the radar is position-specific rather than
+one-size-fits-all.
+""")
+
 
 nb["cells"] = cells
 nbf.write(nb, "analysis.ipynb")
