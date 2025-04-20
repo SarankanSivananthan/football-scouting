@@ -108,6 +108,34 @@ positions, which is why the radar is position-specific rather than
 one-size-fits-all.
 """)
 
+md("""\
+## 4. Player similarity search
+
+Same idea as the audio/lyrics similarity search in the
+[Spotify lyrics clustering project](https://github.com/SarankanSivananthan/spotify-lyrics-clustering),
+applied to the full 30-feature per-90 profile instead of embeddings:
+standardize within position group, then rank by cosine similarity.
+""")
+
+code("""\
+sim = PlayerSimilarity(df)
+sim.find_similar("Kevin De Bruyne", n=5)[["player", "club", "league", "similarity"]]
+""")
+
+code("""\
+sim.find_similar("Virgil van Dijk", n=5)[["player", "club", "league", "similarity"]]
+""")
+
+md("""\
+The De Bruyne neighbors (Insigne, Pléa, Hofmann, Mount, Berardi) are all
+creative attacking midfielders/wide players who combine chance creation
+with some individual carrying threat — a sensible statistical
+neighborhood, even without the model knowing anything about reputation or
+transfer value. The van Dijk neighbors (Aguerd, Acerbi, Fonte, Guéhi,
+Dunk) are all no-nonsense, aerially dominant centre-backs. Neither list
+was hand-picked — it's exactly what `NearestNeighbors` returns.
+""")
+
 
 nb["cells"] = cells
 nbf.write(nb, "analysis.ipynb")
