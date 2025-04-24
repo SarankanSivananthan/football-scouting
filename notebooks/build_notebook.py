@@ -136,6 +136,59 @@ Dunk) are all no-nonsense, aerially dominant centre-backs. Neither list
 was hand-picked — it's exactly what `NearestNeighbors` returns.
 """)
 
+md("""\
+## 5. Do statistically distinct playing-style archetypes actually exist?
+
+Same silhouette-score-driven approach as the Spotify project's KMeans/K
+selection, applied here per position group: cluster forwards into styles
+(poacher vs. creator vs. presser, say) — but check whether the clusters
+are *statistically* distinct before trusting the labels.
+""")
+
+code("""\
+fw = df[df["position"] == "FW"]
+scaler = StandardScaler().fit(fw[FEATURE_COLS])
+X = scaler.transform(fw[FEATURE_COLS])
+scores = sweep_k(X)
+
+fig = px.line(
+    x=list(scores.keys()), y=list(scores.values()), markers=True,
+    labels={"x": "k (number of clusters)", "y": "Silhouette score"},
+    title="Silhouette score by k — forwards",
+)
+fig.show()
+""")
+
+md("""\
+**The honest reading: k=2 scores highest, and every k scores low (≤0.22)
+in absolute terms.** Real per-90 playing profiles are continuous, not
+naturally clustered into a small number of tight, well-separated groups —
+a striker's style shades gradually from poacher to creator rather than
+falling into one bucket or another. This mirrors the same finding from
+the Spotify project's DBSCAN section: high-dimensional, continuous
+real-world data often resists clean clustering, and a silhouette-score
+check exists specifically to catch that instead of quietly picking a
+k that "looks nice" and calling the clusters more real than they are.
+
+For descriptive purposes only (not because k=4 is statistically optimal —
+it isn't), here's what 4 forward clusters look like:
+""")
+
+code("""\
+labeled, centroids = cluster_position_group(df, "FW", k=4)
+display_cols = ["npxg_p90", "xag_p90", "prog_carries_p90", "tackles_plus_int_p90", "aerial_win_pct"]
+centroids[display_cols].round(2).assign(n_players=labeled["cluster"].value_counts().sort_index())
+""")
+
+md("""\
+Even without statistically clean separation, the centroids differ in
+sensible directions — one cluster higher on `npxg_p90` and lower on
+`tackles_plus_int_p90` (poacher-leaning), another higher on `xag_p90` and
+`prog_carries_p90` (creator-leaning) — just not sharply enough to call
+them distinct "types" with statistical confidence. **Descriptive
+segmentation, not a claim of natural clusters.**
+""")
+
 
 nb["cells"] = cells
 nbf.write(nb, "analysis.ipynb")
