@@ -189,6 +189,25 @@ them distinct "types" with statistical confidence. **Descriptive
 segmentation, not a claim of natural clusters.**
 """)
 
+md("""\
+## 6. Takeaways
+
+- **A data-quality check up front changed the whole project's season
+  choice** — the "most recent" season in the raw data was a red herring
+  (an incomplete scrape), and using it uncritically would have quietly
+  corrupted every per-90 rate in the project.
+- **Percentiles only mean something within a like-for-like group** — the
+  radar templates are position-specific by design, not a single template
+  stretched across every role.
+- **Similarity search on a curated per-90 profile finds sensible
+  neighbors** without any reputation or price signal in the input —
+  Van Dijk's nearest neighbors are all commanding centre-backs, De
+  Bruyne's are all creative attacking midfielders.
+- **Not every clustering question has a clean answer, and that's worth
+  reporting rather than hiding** — forward playing styles don't separate
+  into tight statistical clusters, and the silhouette sweep is what
+  surfaces that instead of a cherry-picked k.
+""")
 
 nb["cells"] = cells
 nbf.write(nb, "analysis.ipynb")
