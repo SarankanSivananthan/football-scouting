@@ -2,7 +2,7 @@
 
 Percentile radars and a player-similarity search built on real per-90 statistical profiles — the two things an actual scouting report is made of — plus an honest check on whether "playing-style archetypes" are statistically real or just a nice story.
 
-**Stack**: Python · pandas · scikit-learn · Plotly · Jupyter
+**Stack**: Python, pandas, sklearn, Plotly, Jupyter
 
 ## 🎯 Goal
 
